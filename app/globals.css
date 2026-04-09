@@ -1,0 +1,44 @@
+:root {
+  color-scheme: light;
+  --bg: #f7f1e8;
+  --card: rgba(255, 250, 244, 0.9);
+  --card-strong: #fffaf3;
+  --text: #2a2118;
+  --muted: #6a5b4d;
+  --line: rgba(91, 69, 49, 0.16);
+  --accent: #9f4f2f;
+  --accent-strong: #7f3418;
+  --success: #2a6f4f;
+  --danger: #b3402d;
+  --shadow: 0 18px 40px rgba(105, 73, 48, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(215, 164, 121, 0.26), transparent 30%),
+    linear-gradient(180deg, #f5eadc 0%, #f2ebe5 55%, #efe5d8 100%);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
