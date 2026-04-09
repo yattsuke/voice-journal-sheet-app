@@ -1,0 +1,25 @@
+{
+  "name": "voice-journal-sheet-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "setup:deps": "node ./scripts/setup-deps.mjs",
+    "dev": "node ./scripts/run-next.mjs dev",
+    "build": "node ./scripts/run-next.mjs build",
+    "start": "node ./scripts/run-next.mjs start",
+    "lint": "node ./scripts/run-next.mjs lint"
+  },
+  "dependencies": {
+    "next": "15.2.8",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.0",
+    "@types/react": "19.0.12",
+    "@types/react-dom": "19.0.4",
+    "eslint": "9.24.0",
+    "eslint-config-next": "15.2.8",
+    "typescript": "5.8.3"
+  }
+}
