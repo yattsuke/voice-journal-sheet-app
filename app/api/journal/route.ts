@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { formatJournalEntry, transcribeAudio } from "@/lib/openai";
+import { getJournalTheme } from "@/lib/journal-themes";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -9,6 +10,7 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const audio = formData.get("audio");
     const recordedAt = String(formData.get("recordedAt") || new Date().toISOString());
+    const theme = getJournalTheme(String(formData.get("themeId") || ""));
 
     if (!(audio instanceof File)) {
       return NextResponse.json({ error: "Audio file was not found." }, { status: 400 });
@@ -22,14 +24,18 @@ export async function POST(request: Request) {
 
     const formatted = await formatJournalEntry({
       transcript,
-      recordedAt
+      recordedAt,
+      theme
     });
 
     return NextResponse.json({
       transcript,
       polishedTitle: formatted.title,
       polishedBody: formatted.body,
-      recordedAt
+      recordedAt,
+      themeId: theme.id,
+      themeLabel: theme.label,
+      sheetName: theme.sheetName
     });
   } catch (error) {
     console.error(error);

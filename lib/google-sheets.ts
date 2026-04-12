@@ -1,28 +1,32 @@
 import { env } from "@/lib/env";
+import type { JournalTheme } from "@/lib/journal-themes";
 
 type AppendJournalInput = {
   recordedAt: string;
   transcript: string;
   polishedTitle: string;
   polishedBody: string;
+  theme: JournalTheme;
 };
 
 type AppendJournalResult = {
   saved: boolean;
   rowNumber?: number;
+  sheetName: string;
 };
 
 export async function appendJournalToSheet({
   recordedAt,
   transcript,
   polishedTitle,
-  polishedBody
+  polishedBody,
+  theme
 }: AppendJournalInput): Promise<AppendJournalResult> {
   const url = env.appsScriptUrl();
   const secret = env.appsScriptSecret();
 
   if (!url) {
-    return { saved: false };
+    throw new Error("GOOGLE_APPS_SCRIPT_URL is not configured.");
   }
 
   const response = await fetch(url, {
@@ -35,7 +39,10 @@ export async function appendJournalToSheet({
       recordedAt,
       transcript,
       polishedTitle,
-      polishedBody
+      polishedBody,
+      themeId: theme.id,
+      themeLabel: theme.label,
+      sheetName: theme.sheetName
     })
   });
 
@@ -44,9 +51,15 @@ export async function appendJournalToSheet({
     throw new Error(`Saving to Google Sheets failed: ${message}`);
   }
 
-  const data = (await response.json()) as { ok?: boolean; rowNumber?: number };
+  const data = (await response.json()) as { ok?: boolean; rowNumber?: number; error?: string };
+
+  if (!data.ok) {
+    throw new Error(data.error || "Google Sheets did not accept the journal entry.");
+  }
+
   return {
-    saved: Boolean(data.ok),
-    rowNumber: data.rowNumber
+    saved: true,
+    rowNumber: data.rowNumber,
+    sheetName: theme.sheetName
   };
 }

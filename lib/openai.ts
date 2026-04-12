@@ -1,8 +1,10 @@
 import { env } from "@/lib/env";
+import type { JournalTheme } from "@/lib/journal-themes";
 
 type FormatJournalInput = {
   transcript: string;
   recordedAt: string;
+  theme: JournalTheme;
 };
 
 type FormatJournalOutput = {
@@ -46,7 +48,8 @@ export async function transcribeAudio(file: File) {
 
 export async function formatJournalEntry({
   transcript,
-  recordedAt
+  recordedAt,
+  theme
 }: FormatJournalInput): Promise<FormatJournalOutput> {
   const prompt = [
     "You are a diary editing assistant.",
@@ -55,6 +58,8 @@ export async function formatJournalEntry({
     "Return JSON only.",
     'Format: {"title":"short title in Japanese","body":"2-6 paragraph diary entry in Japanese"}',
     `Recorded at: ${recordedAt}`,
+    `Theme: ${theme.label}`,
+    `Theme guidance: ${theme.promptHint}`,
     "Original transcript:",
     transcript
   ].join("\n");
