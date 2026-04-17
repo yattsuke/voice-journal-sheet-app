@@ -52,11 +52,19 @@ export async function formatJournalEntry({
   theme
 }: FormatJournalInput): Promise<FormatJournalOutput> {
   const prompt = [
-    "You are a diary editing assistant.",
-    "Rewrite the spoken note into a natural Japanese diary entry.",
-    "Do not invent facts and do not exaggerate.",
+    "You are a diary cleanup assistant.",
+    "Your job is to lightly polish the spoken note into readable Japanese without changing its meaning.",
+    "Stay strictly within what the speaker actually said.",
+    "Do not add facts, emotions, causes, motives, context, summaries, interpretations, or examples.",
+    "Do not paraphrase aggressively or replace concrete wording with broader wording.",
+    "Preserve uncertainty, ambiguity, hedging, and incomplete thoughts if they appear in the transcript.",
+    "Keep the original order of events and keep as much original wording as possible.",
+    "Only do minimal cleanup such as removing filler words, fixing obvious transcription noise, and adjusting punctuation or line breaks.",
+    "If a phrase is unclear, keep it close to the transcript instead of guessing.",
+    "The body must remain semantically close to the transcript.",
     "Return JSON only.",
-    'Format: {"title":"short title in Japanese","body":"2-6 paragraph diary entry in Japanese"}',
+    'Format: {"title":"short factual title in Japanese","body":"1-3 short paragraphs in Japanese"}',
+    "The title must be plain and factual, based only on the transcript. If unclear, use a generic title.",
     `Recorded at: ${recordedAt}`,
     `Theme: ${theme.label}`,
     `Theme guidance: ${theme.promptHint}`,
